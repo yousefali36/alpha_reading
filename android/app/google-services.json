@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "53159210577",
+    "project_id": "alpha-books-7fc38",
+    "storage_bucket": "alpha-books-7fc38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53159210577:android:f559725919fa59acee1270",
+        "android_client_info": {
+          "package_name": "com.example.alpha_reading"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB1ubWeNi87Wip0kFQVlaozXKkVPnmySI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
