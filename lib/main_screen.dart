@@ -1,3 +1,4 @@
+import 'package:alpha_reading/features/cart/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io'; // Import for exit function
@@ -15,6 +16,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final List<Book> savedBooks = [];
+  final List<Map<String, dynamic>> cartItems = [];
 
   void _saveBook(Book book) {
     if (!savedBooks.any((b) => b.isbn13 == book.isbn13)) {
@@ -22,6 +24,12 @@ class _MainScreenState extends State<MainScreen> {
         savedBooks.add(book);
       });
     }
+  }
+
+  void _removeFromCart(String isbn13) {
+    setState(() {
+      cartItems.removeWhere((item) => item['isbn13'] == isbn13);
+    });
   }
 
   @override
@@ -47,9 +55,18 @@ class _MainScreenState extends State<MainScreen> {
         body: IndexedStack(
           index: _selectedIndex,
           children: [
-            HomeView(savedBooks: savedBooks, onSaveBook: _saveBook),
+            HomeView(
+              savedBooks: savedBooks,
+              onSaveBook: _saveBook,
+              cartItems: cartItems,
+              onRemoveFromCart: _removeFromCart, // Pass the callback
+            ),
             SavedBooks(
               savedBooks: savedBooks.map((book) => book.toMap()).toList(),
+            ),
+            CartScreen(
+              cartItems: cartItems,
+              onRemoveFromCart: _removeFromCart, // Pass the callback
             ),
             ProfileView(),
           ],
@@ -58,6 +75,8 @@ class _MainScreenState extends State<MainScreen> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Saved'),
+            //BottomNavigationBarItem(icon: Icon(Icons.library_books), label: 'Library'),
+            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           ],
           currentIndex: _selectedIndex,

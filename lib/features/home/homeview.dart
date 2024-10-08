@@ -1,4 +1,5 @@
 import 'package:alpha_reading/models/book.dart';
+import 'package:alpha_reading/namednavigator/named-navigator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io'; // Import for exit function
@@ -12,8 +13,10 @@ import 'book_info/book_info.dart'; // Import the BookInfo screen
 class HomeView extends StatefulWidget {
   final List<Book> savedBooks; // Define savedBooks in the widget
   final Function(Book) onSaveBook; // Define onSaveBook in the widget
+  final List<Map<String, dynamic>> cartItems; // Pass cartItems from MainScreen
+  final Function(String) onRemoveFromCart; // Add a callback function
 
-  HomeView({Key? key, required this.savedBooks, required this.onSaveBook}) : super(key: key); // Add savedBooks and onSaveBook to the constructor
+  HomeView({Key? key, required this.savedBooks, required this.onSaveBook, required this.cartItems, required this.onRemoveFromCart}) : super(key: key); // Add savedBooks, onSaveBook, and cartItems to the constructor
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -22,6 +25,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   List<Map<String, dynamic>> books = []; // Example book list
   Set<String> savedBookIds = Set(); // Track saved books by ID
+  Set<String> cartBookIds = Set(); // Track cart books by ID
   bool isLoading = true;
   String? errorMessage;
 
@@ -31,6 +35,8 @@ class _HomeViewState extends State<HomeView> {
     _fetchBooks();
     // Initialize savedBookIds from savedBooks
     savedBookIds = widget.savedBooks.map((book) => book.isbn13).toSet();
+    // Initialize cartBookIds from cartItems
+    cartBookIds = widget.cartItems.map((item) => item['isbn13'] as String).toSet();
   }
 
   Future<void> _fetchBooks() async {
@@ -69,6 +75,22 @@ class _HomeViewState extends State<HomeView> {
         savedBookIds.add(book.isbn13); // Update local state to reflect the saved status
       });
     }
+  }
+
+  void _addToCart(Map<String, dynamic> book) {
+    if (!cartBookIds.contains(book['isbn13'])) {
+      setState(() {
+        widget.cartItems.add(book);
+        cartBookIds.add(book['isbn13']);
+      });
+    }
+  }
+
+  void _removeFromCart(String isbn13) {
+    setState(() {
+      widget.cartItems.removeWhere((item) => item['isbn13'] == isbn13);
+      cartBookIds.remove(isbn13);
+    });
   }
 
   @override
@@ -120,6 +142,21 @@ class _HomeViewState extends State<HomeView> {
               },
             ),
             const SizedBox(width: 16),
+            /*IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.pushNamed(context, NamedNavigator.cart);
+              },
+            ),*/
+            /*IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () async {
+                await Navigator.pushNamed(context, NamedNavigator.cart);
+                setState(() {
+                  // Refresh the state to update the UI
+                });
+              },
+            ),*/
           ],
         ),
         body: Padding(
@@ -139,6 +176,7 @@ class _HomeViewState extends State<HomeView> {
                       itemBuilder: (context, index) {
                         final book = books[index];
                         final isSaved = savedBookIds.contains(book['isbn13']);
+                        final isInCart = cartBookIds.contains(book['isbn13']);
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -195,6 +233,10 @@ class _HomeViewState extends State<HomeView> {
                                       ElevatedButton(
                                         onPressed: () => handleSaveBook(book),
                                         child: Text(isSaved ? 'Saved' : 'Save'),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () => isInCart ? _removeFromCart(book['isbn13']) : _addToCart(book),
+                                        child: Text(isInCart ? 'Added to Cart' : 'Add to Cart'),
                                       ),
                                     ],
                                   ),

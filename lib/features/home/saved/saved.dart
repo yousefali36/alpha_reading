@@ -29,6 +29,7 @@ class SavedBooks extends StatelessWidget {
                     leading: book['image'] != null ? Image.network(book['image']) : null,
                     title: Text(book['title'] ?? 'No Title'),
                     subtitle: Text(book['subtitle'] ?? 'No Subtitle'),
+                    trailing: Text(book['price'] ?? 'N/A'),
                   ),
                 );
               },
