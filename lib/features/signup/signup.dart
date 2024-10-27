@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../namednavigator/named-navigator.dart';
+import '../../firestore_service.dart'; // Import FirestoreService
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -18,6 +19,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
+  bool _obscureText = true; // Define _obscureText
+
+  final FirestoreService _firestoreService = FirestoreService(); // Initialize FirestoreService
 
   Future<void> _handleEmailPasswordSignUp() async {
     setState(() {
@@ -32,6 +36,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
 
       await credential.user?.updateDisplayName(fullNameController.text);
+
+      // Create user document in Firestore
+      await _firestoreService.createUserInFirestore(
+        credential.user!.uid,
+        '', // Add phone number if available
+        '', // Add image URL if available
+      );
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Account created successfully. Please log in.')),
@@ -76,15 +87,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 const SizedBox(height: 80),
                 const SizedBox(height: 16),
-                const Text(
-                  'ALPHA',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 32),
+                
+                Image.asset('assets/logo.png'),
+                const SizedBox(height: 41),
                 if (_errorMessage != null)
                   Text(
                     _errorMessage!,
@@ -134,20 +139,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: passwordController,
-                  obscureText: true,
+                  obscureText: _obscureText, // Use the _obscureText variable
                   decoration: InputDecoration(
                     labelText: 'Password',
+                    hintText: 'Enter your password', // Add hintText
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
-                      icon: const Icon(Icons.visibility),
+                      icon: Icon(
+                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                      ),
                       onPressed: () {
-                        // Toggle password visibility
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
                       },
+                      tooltip: _obscureText ? 'Show Password' : 'Hide Password', // Add tooltip
                     ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your password';
+                    } else if (value.length < 6) {
+                      return 'Password must be at least 6 characters long'; // Add length validation
                     }
                     return null;
                   },

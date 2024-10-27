@@ -66,9 +66,8 @@ class _HomeViewState extends State<HomeView> {
     // Implement your logic to get the user profile image URL
     return null;
   }
-
   void handleSaveBook(Map<String, dynamic> bookData) {
-    Book book = Book.fromMap(bookData);
+    Book book = Book.fromMap(bookData, ''); // Add an empty string as the second argument
     if (!widget.savedBooks.any((b) => b.isbn13 == book.isbn13)) {
       widget.onSaveBook(book);
       setState(() {

@@ -63,7 +63,7 @@ class _ProfileViewState extends State<ProfileView> {
         ),
         body: userData == null
             ? const Center(child: CircularProgressIndicator())
-            : Padding(
+            : SingleChildScrollView( // Wrap the content in SingleChildScrollView
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,18 +78,19 @@ class _ProfileViewState extends State<ProfileView> {
                           child: userData!['imageUrl'] == null ? const Icon(Icons.person, size: 40) : null,
                         ),
                         const SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              userData!['fullName'] ?? 'User Name',
-                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            Text(user?.email ?? 'user@example.com'),
-                            Text('Phone Number: ${userData!['phoneNumber'] ?? ''}'),
-                          ],
+                        Expanded( // Use Expanded to prevent overflow
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                userData!['fullName'] ?? 'User Name',
+                                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              Text(user?.email ?? 'user@example.com'),
+                              Text('Phone Number: ${userData!['phoneNumber'] ?? ''}'),
+                            ],
+                          ),
                         ),
-                        const Spacer(),
                         IconButton(
                           icon: const Icon(Icons.edit, color: Colors.blue),
                           onPressed: () async {

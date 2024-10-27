@@ -9,10 +9,8 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate the total price
     double totalPrice = cartItems.fold(0.0, (sum, item) {
       final price = item['price'];
-      // Ensure the price is parsed as a double
       double itemPrice = 0.0;
       if (price is num) {
         itemPrice = price.toDouble();
@@ -55,7 +53,7 @@ class CartScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, NamedNavigator.creditCard); // Navigate to CreditCardScreen
+                    Navigator.pushNamed(context, NamedNavigator.creditCard);
                   },
                   child: const Text('Check-Out'),
                 ),

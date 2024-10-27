@@ -8,7 +8,6 @@ import '../main_screen.dart'; // Import MainScreen
 import '../features/profile/profileview.dart';
 import '../features/profile/editinfo/editinfo.dart'; // Import EditProfile
 import '../features/profile/editinfo/change_password.dart'; // Import ChangePassword
-import 'package:alpha_reading/features/cart/checkout/confirm/preconfirm.dart'; // Import PreConfirmScreen
 
 class NamedNavigator {
   static const String onboarding = '/onboarding';
@@ -21,7 +20,6 @@ class NamedNavigator {
   static const String changePassword = '/changePassword'; // Add change password route
   static const String cart = '/cart';  // Add cart route
   static const String creditCard = '/creditCard'; // Define credit card route
-  static const String preConfirm = '/preConfirm'; // Add preConfirm route
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -52,12 +50,6 @@ class NamedNavigator {
         );
       case creditCard:
         return MaterialPageRoute(builder: (_) => const CreditCardScreen());
-      case preConfirm:
-        return MaterialPageRoute(
-          builder: (_) => PreConfirmScreen(
-            cartItems: settings.arguments as List<Map<String, dynamic>>,
-          ),
-        );
       default:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
     }

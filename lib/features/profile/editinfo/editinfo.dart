@@ -100,67 +100,69 @@ class _EditProfileState extends State<EditProfile> {
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: _image != null
-                        ? FileImage(_image!)
-                        : (userData != null && userData!['imageUrl'] != null ? NetworkImage(userData!['imageUrl']) : null),
-                    child: _image == null && (userData == null || userData!['imageUrl'] == null) ? const Icon(Icons.person, size: 40) : null,
-                  ),
-                  const SizedBox(height: 8),
-                  TextButton(
-                    onPressed: _pickImage,
-                    child: const Text('Photo Upload +', style: TextStyle(color: Colors.blue)),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: TextEditingController(text: user?.email ?? ''),
-              decoration: const InputDecoration(
-                labelText: 'Email ID',
-                border: OutlineInputBorder(),
-              ),
-              readOnly: true,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: phoneController,
-              decoration: const InputDecoration(
-                labelText: 'Phone',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.phone,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly], // Accept numbers only
-            ),
-            const SizedBox(height: 32),
-            Center(
-              child: ElevatedButton(
-                onPressed: _saveProfile,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
+      body: SingleChildScrollView( // Wrap the body in SingleChildScrollView
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage: _image != null
+                          ? FileImage(_image!)
+                          : (userData != null && userData!['imageUrl'] != null ? NetworkImage(userData!['imageUrl']) : null),
+                      child: _image == null && (userData == null || userData!['imageUrl'] == null) ? const Icon(Icons.person, size: 40) : null,
+                    ),
+                    const SizedBox(height: 8),
+                    TextButton(
+                      onPressed: _pickImage,
+                      child: const Text('Photo Upload +', style: TextStyle(color: Colors.blue)),
+                    ),
+                  ],
                 ),
-                child: const Text('Save'),
               ),
-            ),
-          ],
+              const SizedBox(height: 32),
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: TextEditingController(text: user?.email ?? ''),
+                decoration: const InputDecoration(
+                  labelText: 'Email ID',
+                  border: OutlineInputBorder(),
+                ),
+                readOnly: true,
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: phoneController,
+                decoration: const InputDecoration(
+                  labelText: 'Phone',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.phone,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly], // Accept numbers only
+              ),
+              const SizedBox(height: 32),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _saveProfile,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  child: const Text('Save'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

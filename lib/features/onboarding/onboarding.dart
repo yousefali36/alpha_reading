@@ -18,7 +18,7 @@ class OnboardingScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-             // Image.asset('lib/assets/ALPHA Bookstore_LOGO_LIGHT-VER 1.png', height: 250), // Update the path
+              Image.asset('assets/onboarding.png', height: 250), // Update the path
               const Spacer(),
               const Text(
                 'Welcome',

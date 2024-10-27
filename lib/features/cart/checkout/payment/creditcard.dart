@@ -25,9 +25,9 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Checkout'),
+        title: const Text('Credit Card Payment'),
       ),
-      body: Padding(
+      body: SingleChildScrollView( // Wrap the body in a SingleChildScrollView
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
